@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta
+    name="theme-color"
+    content="#55b7ff"
+  >
+
+  <meta
+    name="description"
+    content="Fitness Go - your personal fitness tracker."
+  >
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <title>Fitness Go</title>
+
+  <style>
+    :root {
+      --background: #f4f9ff;
+      --card: #ffffff;
+      --text: #10243a;
+      --muted: #64748b;
+      --border: #dbe8f5;
+      --blue: #2196f3;
+      --blue-light: #e8f5ff;
+      --green: #24723d;
+      --green-light: #e8f7ed;
+      --danger: #c62828;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: var(--background);
+      color: var(--text);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(1050px, 100%);
+      margin: auto;
+      padding: 18px;
+    }
+
+    /* HEADER */
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: var(--blue);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      font-size: 22px;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 850;
+    }
+
+    .status {
+      background: var(--green-light);
+      color: var(--green);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* NAVIGATION */
+
+    .nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .nav button {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 13px;
+      padding: 12px;
+      font-weight: 650;
+    }
+
+    .nav button.active {
+      background: var(--blue-light);
+      border-color: #b8ddfb;
+      color: #075c9c;
+    }
+
+    /* CARDS */
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(22, 50, 77, 0.05);
+      margin-bottom: 14px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .big {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    /* STAT GRID */
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: #fbfdff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .stat b {
+      font-size: 26px;
+      display: block;
+      margin-top: 7px;
+    }
+
+    .stat small {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* PROGRESS */
+
+    .progress {
+      height: 10px;
+      background: #e9f0f6;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 15px 0 7px;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--blue);
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    /* BUTTONS */
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .primary,
+    .secondary {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 750;
+    }
+
+    .primary {
+      background: var(--blue);
+      color: white;
+    }
+
+    .secondary {
+      background: var(--blue-light);
+      color: #075c9c;
+    }
+
+    /* CHART */
+
+    .chart {
+      height: 180px;
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      padding-top: 20px;
+    }
+
+    .bar {
+      flex: 1;
+      background: #9ed6fa;
+      border-radius: 9px 9px 3px 3px;
+      min-height: 8px;
+    }
+
+    .bar.today {
+      background: var(--blue);
+    }
+
+    .labels {
+      display: flex;
+      gap: 8px;
+    }
+
+    .labels span {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* WORKOUT LIST */
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .work {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    /* SETTINGS */
+
+    .setting {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    input {
+      width: 130px;
+      padding: 9px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    /* MESSAGES */
+
+    .notice {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 12px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 760px) {
+      .app {
+        padding: 12px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav button {
+        padding: 11px 5px;
+        font-size: 12px;
+      }
+
+      .big {
+        font-size: 36px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .grid {
+        gap: 8px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .stat {
+        padding: 13px;
+      }
+
+      .stat b {
+        font-size: 23px;
+      }
+
+      .title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<main class="app">
+
+  <!-- HEADER -->
+
+  <header class="top">
+
+    <div class="brand">
+
+      <div class="logo">
+        FG
+      </div>
+
+      <div>
+        <div class="eyebrow">
+          Your personal fitness tracker
+        </div>
+
+        <div class="title">
+          Fitness Go
+        </div>
+      </div>
+
+    </div>
+
+    <div class="status">
+      ● Ready
+    </div>
+
+  </header>
+
+
+  <!-- NAVIGATION -->
+
+  <nav class="nav" aria-label="Fitness Go navigation">
+
+    <button
+      class="active"
+      data-tab="dashboard"
+      type="button"
+    >
+      Dashboard
+    </button>
+
+    <button
+      data-tab="workouts"
+      type="button"
+    >
+      Workouts
+    </button>
+
+    <button
+      data-tab="progress"
+      type="button"
+    >
+      Progress
+    </button>
+
+    <button
+      data-tab="settings"
+      type="button"
+    >
+      Settings
+    </button>
+
+  </nav>
+
+
+  <!-- ========================= -->
+  <!-- DASHBOARD -->
+  <!-- ========================= -->
+
+  <section id="dashboard">
+
+    <!-- STEPS -->
+
+    <div class="card hero">
+
+      <div>
+
+        <p class="eyebrow">
+          Today's steps
+        </p>
+
+        <div class="big">
+          <span id="steps">6248</span>
+        </div>
+
+        <p class="muted">
+          Goal:
+          <span id="stepGoalText">
+            10,000
+          </span>
+          steps
+        </p>
+
+      </div>
+
+
+      <div
+        style="
+          min-width:210px;
+          width:100%;
+          max-width:300px;
+        "
+      >
+
+        <strong id="stepPct">
+          62%
+        </strong>
+
+        <div class="progress">
+
+          <span
+            id="stepBar"
+            style="width:62%"
+          ></span>
+
+        </div>
+
+        <p class="eyebrow">
+
+          <span id="remaining">
+            3752
+          </span>
+
+          steps remaining
+
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- FITNESS STATS -->
+
+    <div class="grid">
+
+      <!-- HEART RATE -->
+
+      <div class="stat">
+
+        <span class="muted">
+          ♥ Heart rate
+        </span>
+
+        <b>
+
+          <span id="bpm">
+            --
+          </span>
+
+          <small>
+            BPM
+          </small>
+
+        </b>
+
+        <span
+          id="hrStatus"
+          class="eyebrow"
+        >
+          Not connected
+        </span>
+
+        <button
+          id="connectHR"
+          class="secondary"
+          type="button"
+          style="
+            margin-top:10px;
+            width:100%;
+          "
+        >
+          Connect device
+        </button>
+
+      </div>
+
+
+      <!-- CALORIES -->
+
+      <div class="stat">
+
+        <span class="muted">
+          🔥 Calories
+        </span>
+
+        <b id="calories">
+          386
+        </b>
+
+        <span class="eyebrow">
+          estimated
+        </span>
+
+      </div>
+
+
+      <!-- DISTANCE -->
+
+      <div class="stat">
+
+        <span class="muted">
+          🏃 Distance
+        </span>
+
+        <b>
+          <span id="distance">
+            4.7
+          </span>
+          km
+        </b>
+
+        <span class="eyebrow">
+          estimated
+        </span>
+
+      </div>
+
+
+      <!-- ACTIVE TIME -->
+
+      <div class="stat">
+
+        <span class="muted">
+          ⏱ Active
+        </span>
+
+        <b>
+
+          <span id="active">
+            42
+          </span>
+
+          min
+
+        </b>
+
+        <span class="eyebrow">
+          today
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- DAILY GOALS -->
+
+    <div class="card">
+
+      <div class="hero">
+
+        <div>
+
+          <p class="eyebrow">
+            Daily goals
+          </p>
+
+          <h2>
+            Keep moving
+          </h2>
+
+        </div>
+
+        <strong>
+          🔥
+          <span id="streak">
+            7
+          </span>
+          day streak
+        </strong>
+
+      </div>
+
+
+      <div
+        class="grid"
+        style="margin-top:15px"
+      >
+
+        <div class="stat">
+
+          <span class="eyebrow">
+            Steps
+          </span>
+
+          <b id="goalSteps">
+            62%
+          </b>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="eyebrow">
+            Water
+          </span>
+
+          <b>
+
+            <span id="water">
+              5
+            </span>
+
+            /8
+
+          </b>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="eyebrow">
+            Workout
+          </span>
+
+          <b>
+
+            <span id="goalWorkout">
+              42
+            </span>
+
+            /60
+
+          </b>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="eyebrow">
+            Calories
+          </span>
+
+          <b id="goalCalories">
+            386
+          </b>
+
+        </div>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="primary"
+          id="addSteps"
+          type="button"
+        >
+          ＋ 500 steps
+        </button>
+
+        <button
+          class="secondary"
+          id="addWater"
+          type="button"
+        >
+          ＋ Water
+        </button>
+
+        <button
+          class="secondary"
+          id="startWorkout"
+          type="button"
+        >
+          Start 10 min workout
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- HEART RATE INFORMATION -->
+
+    <div class="card">
+
+      <h2>
+        Heart-rate support
+      </h2>
+
+      <p class="notice">
+
+        A normal phone or PC browser cannot measure
+        your pulse through the screen.
+
+        The Connect device button can request a
+        compatible Bluetooth Heart Rate Service
+        device in supported browsers.
+
+      </p>
+
+      <p class="notice">
+
+        Fitness Go does not pretend a random number
+        is a real heart-rate reading.
+
+      </p>
+
+      <p
+        id="message"
+        class="notice"
+        aria-live="polite"
+      ></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================= -->
+  <!-- WORKOUTS -->
+  <!-- ========================= -->
+
+  <section
+    id="workouts"
+    class="hidden"
+  >
+
+    <div class="card">
+
+      <p class="eyebrow">
+        Workout tracker
+      </p>
+
+      <h2>
+        Choose a workout
+      </h2>
+
+
+      <div class="list">
+
+
+        <!-- WALK -->
+
+        <div class="work">
+
+          <div>
+
+            <strong>
+              🚶 Walk
+            </strong>
+
+            <div class="eyebrow">
+              20 minutes · light activity
+            </div>
+
+          </div>
+
+          <button
+            class="secondary workout"
+            data-min="20"
+            data-cal="100"
+            type="button"
+          >
+            Log
+          </button>
+
+        </div>
+
+
+        <!-- RUN -->
+
+        <div class="work">
+
+          <div>
+
+            <strong>
+              🏃 Run
+            </strong>
+
+            <div class="eyebrow">
+              30 minutes · cardio
+            </div>
+
+          </div>
+
+          <button
+            class="secondary workout"
+            data-min="30"
+            data-cal="220"
+            type="button"
+          >
+            Log
+          </button>
+
+        </div>
+
+
+        <!-- CYCLING -->
+
+        <div class="work">
+
+          <div>
+
+            <strong>
+              🚴 Cycling
+            </strong>
+
+            <div class="eyebrow">
+              30 minutes · cardio
+            </div>
+
+          </div>
+
+          <button
+            class="secondary workout"
+            data-min="30"
+            data-cal="180"
+            type="button"
+          >
+            Log
+          </button>
+
+        </div>
+
+
+        <!-- STRENGTH -->
+
+        <div class="work">
+
+          <div>
+
+            <strong>
+              💪 Strength
+            </strong>
+
+            <div class="eyebrow">
+              25 minutes · strength
+            </div>
+
+          </div>
+
+          <button
+            class="secondary workout"
+            data-min="25"
+            data-cal="140"
+            type="button"
+          >
+            Log
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <p
+        id="workoutMessage"
+        class="notice"
+        aria-live="polite"
+      ></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================= -->
+  <!-- PROGRESS -->
+  <!-- ========================= -->
+
+  <section
+    id="progress"
+    class="hidden"
+  >
+
+    <div class="card">
+
+      <p class="eyebrow">
+        Progress
+      </p>
+
+      <h2>
+        This week
+      </h2>
+
+
+      <div
+        class="chart"
+        aria-label="Weekly activity chart"
+      >
+
+        <div
+          class="bar"
+          style="height:52%"
+        ></div>
+
+        <div
+          class="bar"
+          style="height:67%"
+        ></div>
+
+        <div
+          class="bar"
+          style="height:43%"
+        ></div>
+
+        <div
+          class="bar"
+          style="height:78%"
+        ></div>
+
+        <div
+          class="bar"
+          style="height:61%"
+        ></div>
+
+        <div
+          class="bar"
+          style="height:86%"
+        ></div>
+
+        <div
+          class="bar today"
+          id="todayBar"
+          style="height:62%"
+        ></div>
+
+      </div>
+
+
+      <div class="labels">
+
+        <span>Mon</span>
+        <span>Tue</span>
+        <span>Wed</span>
+        <span>Thu</span>
+        <span>Fri</span>
+        <span>Sat</span>
+        <span>Today</span>
+
+      </div>
+
+    </div>
+
+
+    <div class="grid">
+
+      <div class="stat">
+
+        <span class="eyebrow">
+          Today's steps
+        </span>
+
+        <b id="pSteps">
+          6248
+        </b>
+
+      </div>
+
+
+      <div class="stat">
+
+        <span class="eyebrow">
+          Workouts
+        </span>
+
+        <b id="pWorkouts">
+          3
+        </b>
+
+      </div>
+
+
+      <div class="stat">
+
+        <span class="eyebrow">
+          Active minutes
+        </span>
+
+        <b id="pActive">
+          42
+        </b>
+
+      </div>
+
+
+      <div class="stat">
+
+        <span class="eyebrow">
+          Water
+        </span>
+
+        <b id="pWater">
+          5 cups
+        </b>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================= -->
+  <!-- SETTINGS -->
+  <!-- ========================= -->
+
+  <section
+    id="settings"
+    class="hidden"
+  >
+
+    <div class="card">
+
+      <p class="eyebrow">
+        Preferences
+      </p>
+
+      <h2>
+        Goals
+      </h2>
+
+
+      <div class="setting">
+
+        <span>
+          Daily steps
+        </span>
+
+        <input
+          id="goalInput"
+          type="number"
+          min="1000"
+          max="100000"
+          step="500"
+          value="10000"
+        >
+
+      </div>
+
+
+      <div class="setting">
+
+        <span>
+          Daily active minutes
+        </span>
+
+        <input
+          id="activeGoalInput"
+          type="number"
+          min="10"
+          max="600"
+          step="5"
+          value="60"
+        >
+
+      </div>
+
+
+      <button
+        id="saveGoals"
+        class="primary"
+        type="button"
+        style="margin-top:15px"
+      >
+        Save goals
+      </button>
+
+
+      <p
+        id="settingsMessage"
+        class="notice"
+      ></p>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>
+        App information
+      </h2>
+
+      <p class="notice">
+
+        Fitness Go is designed as a free
+        Progressive Web App.
+
+        It can be installed from a supported
+        browser on Android, iPhone and PC.
+
+      </p>
+
+      <p class="notice">
+
+        Real health-data integrations require
+        platform-specific APIs and appropriate
+        privacy handling.
+
+      </p>
+
+
+      <button
+        id="reset"
+        class="secondary"
+        type="button"
+        style="margin-top:12px"
+      >
+        Reset demo data
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <div class="footer">
+    Fitness Go · Free PWA
+  </div>
+
+</main>
+
+
+<script>
+
+(function () {
+
+  "use strict";
+
+
+  /* =========================
+     APP STATE
+  ========================= */
+
+  let state = {
+
+    steps: 6248,
+
+    calories: 386,
+
+    active: 42,
+
+    water: 5,
+
+    workouts: 3,
+
+    streak: 7,
+
+    stepGoal: 10000,
+
+    activeGoal: 60
+
+  };
+
+
+  /* =========================
+     SHORTCUT
+  ========================= */
+
+  const $ = function (id) {
+    return document.getElementById(id);
+  };
+
+
+  /* =========================
+     UPDATE UI
+  ========================= */
+
+  function render() {
+
+    $("steps").textContent =
+      state.steps.toLocaleString();
+
+
+    $("stepGoalText").textContent =
+      state.stepGoal.toLocaleString();
+
+
+    const percentage =
+      Math.min(
+        100,
+        state.steps / state.stepGoal * 100
+      );
+
+
+    $("stepPct").textContent =
+      Math.round(percentage) + "%";
+
+
+    $("stepBar").style.width =
+      percentage + "%";
+
+
+    $("remaining").textContent =
+      Math.max(
+        0,
+        state.stepGoal - state.steps
+      ).toLocaleString();
+
+
+    $("goalSteps").textContent =
+      Math.round(percentage) + "%";
+
+
+    $("calories").textContent =
+      state.calories;
+
+
+    $("goalCalories").textContent =
+      state.calories;
+
+
+    $("active").textContent =
+      state.active;
+
+
+    $("water").textContent =
+      state.water;
+
+
+    $("streak").textContent =
+      state.streak;
+
+
+    /*
+      Approximate distance based on steps.
+
+      This is only an estimate.
+    */
+
+    $("distance").textContent =
+      (state.steps * 0.00075).toFixed(1);
+
+
+    $("goalWorkout").textContent =
+      Math.min(
+        state.active,
+        state.activeGoal
+      );
+
+
+    /* PROGRESS PAGE */
+
+    $("pSteps").textContent =
+      state.steps.toLocaleString();
+
+
+    $("pWorkouts").textContent =
+      state.workouts;
+
+
+    $("pActive").textContent =
+      state.active;
+
+
+    $("pWater").textContent =
+      state.water + " cups";
+
+
+    $("todayBar").style.height =
+      Math.max(
+        8,
+        Math.min(100, percentage)
+      ) + "%";
+
+  }
+
+
+  /* =========================
+     NAVIGATION
+  ========================= */
+
+  document
+    .querySelectorAll("[data-tab]")
+    .forEach(function (button) {
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          document
+            .querySelectorAll("[data-tab]")
+            .forEach(function (btn) {
+
+              btn.classList.remove(
+                "active"
+              );
+
+            });
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          const tabs = [
+            "dashboard",
+            "workouts",
+            "progress",
+            "settings"
+          ];
+
+
+          tabs.forEach(function (id) {
+
+            $(id).classList.toggle(
+              "hidden",
+              id !== button.dataset.tab
+            );
+
+          });
+
+        }
+      );
+
+    });
+
+
+  /* =========================
+     ADD STEPS
+  ========================= */
+
+  $("addSteps").addEventListener(
+    "click",
+    function () {
+
+      state.steps =
+        Math.min(
+          100000,
+          state.steps + 500
+        );
+
+
+      state.calories += 22;
+
+
+      render();
+
+
+      $("message").textContent =
+        "500 steps added.";
+
+    }
+  );
+
+
+  /* =========================
+     ADD WATER
+  ========================= */
+
+  $("addWater").addEventListener(
+    "click",
+    function () {
+
+      state.water =
+        Math.min(
+          8,
+          state.water + 1
+        );
+
+
+      render();
+
+
+      if (state.water >= 8) {
+
+        $("message").textContent =
+          "Daily water goal reached.";
+
+      } else {
+
+        $("message").textContent =
+          "Water logged.";
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     QUICK WORKOUT
+  ========================= */
+
+  $("startWorkout").addEventListener(
+    "click",
+    function () {
+
+      state.active += 10;
+
+      state.calories += 60;
+
+      state.workouts++;
+
+
+      render();
+
+
+      $("message").textContent =
+        "10-minute workout logged.";
+
+    }
+  );
+
+
+  /* =========================
+     WORKOUT PAGE
+  ========================= */
+
+  document
+    .querySelectorAll(".workout")
+    .forEach(function (button) {
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          const minutes =
+            Number(button.dataset.min);
+
+
+          const calories =
+            Number(button.dataset.cal);
+
+
+          state.active += minutes;
+
+          state.calories += calories;
+
+          state.workouts++;
+
+
+          render();
+
+
+          $("workoutMessage").textContent =
+            "Workout logged successfully.";
+
+        }
+      );
+
+    });
+
+
+  /* =========================
+     BLUETOOTH HEART RATE
+  ========================= */
+
+  $("connectHR").addEventListener(
+    "click",
+    async function () {
+
+      /*
+        Web Bluetooth is not available
+        in every browser/device.
+      */
+
+      if (!navigator.bluetooth) {
+
+        $("hrStatus").textContent =
+          "Bluetooth unavailable";
+
+
+        $("message").textContent =
+          "Web Bluetooth is not supported by this browser.";
+
+        return;
+
+      }
+
+
+      try {
+
+        /*
+          Request a device using the
+          standard Heart Rate Service.
+        */
+
+        const device =
+          await navigator.bluetooth.requestDevice({
+
+            filters: [
+              {
+                services: [
+                  "heart_rate"
+                ]
+              }
+            ]
+
+          });
+
+
+        /*
+          Connect to the Bluetooth GATT server.
+        */
+
+        const server =
+          await device.gatt.connect();
+
+
+        /*
+          Get the standard Heart Rate Service.
+        */
+
+        const service =
+          await server.getPrimaryService(
+            "heart_rate"
+          );
+
+
+        /*
+          Get the Heart Rate Measurement
+          characteristic.
+        */
+
+        const characteristic =
+          await service.getCharacteristic(
+            "heart_rate_measurement"
+          );
+
+
+        /*
+          Start receiving live readings.
+        */
+
+        await characteristic.startNotifications();
+
+
+        /*
+          Handle each heart-rate reading.
+        */
+
+        characteristic.addEventListener(
+          "characteristicvaluechanged",
+          function (event) {
+
+            const value =
+              event.target.value;
+
+
+            /*
+              The first byte contains flags.
+
+              Bit 0:
+              0 = UINT8 BPM
+              1 = UINT16 BPM
+            */
+
+            const flags =
+              value.getUint8(0);
+
+
+            let heartRate;
+
+
+            if (flags & 1) {
+
+              heartRate =
+                value.getUint16(
+                  1,
+                  true
+                );
+
+            } else {
+
+              heartRate =
+                value.getUint8(1);
+
+            }
+
+
+            $("bpm").textContent =
+              heartRate;
+
+
+            $("hrStatus").textContent =
+              "Live reading · " +
+              (device.name ||
+                "Bluetooth sensor");
+
+
+            $("message").textContent =
+              "Live heart-rate reading received.";
+
+          }
+        );
+
+
+        $("hrStatus").textContent =
+          "Connected · waiting for reading";
+
+
+        $("message").textContent =
+          "Heart-rate device connected.";
+
+
+        /*
+          Detect disconnection.
+        */
+
+        device.addEventListener(
+          "gattserverdisconnected",
+          function () {
+
+            $("hrStatus").textContent =
+              "Disconnected";
+
+
+            $("message").textContent =
+              "Heart-rate device disconnected.";
+
+          }
+        );
+
+
+      } catch (error) {
+
+        if (
+          error.name ===
+          "NotFoundError"
+        ) {
+
+          $("message").textContent =
+            "No device selected.";
+
+        } else {
+
+          $("message").textContent =
+            "Could not connect to the heart-rate device.";
+
+        }
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     SAVE GOALS
+  ========================= */
+
+  $("saveGoals").addEventListener(
+    "click",
+    function () {
+
+      let stepGoal =
+        Number(
+          $("goalInput").value
+        );
+
+
+      let activeGoal =
+        Number(
+          $("activeGoalInput").value
+        );
+
+
+      if (!Number.isFinite(stepGoal)) {
+
+        stepGoal = 10000;
+
+      }
+
+
+      if (!Number.isFinite(activeGoal)) {
+
+        activeGoal = 60;
+
+      }
+
+
+      stepGoal =
+        Math.max(
+          1000,
+          Math.min(
+            100000,
+            stepGoal
+          )
+        );
+
+
+      activeGoal =
+        Math.max(
+          10,
+          Math.min(
+            600,
+            activeGoal
+          )
+        );
+
+
+      state.stepGoal =
+        stepGoal;
+
+
+      state.activeGoal =
+        activeGoal;
+
+
+      render();
+
+
+      $("settingsMessage").textContent =
+        "Goals saved.";
+
+    }
+  );
+
+
+  /* =========================
+     RESET
+  ========================= */
+
+  $("reset").addEventListener(
+    "click",
+    function () {
+
+      state = {
+
+        steps: 6248,
+
+        calories: 386,
+
+        active: 42,
+
+        water: 5,
+
+        workouts: 3,
+
+        streak: 7,
+
+        stepGoal: 10000,
+
+        activeGoal: 60
+
+      };
+
+
+      $("goalInput").value =
+        10000;
+
+
+      $("activeGoalInput").value =
+        60;
+
+
+      $("bpm").textContent =
+        "--";
+
+
+      $("hrStatus").textContent =
+        "Not connected";
+
+
+      render();
+
+
+      $("settingsMessage").textContent =
+        "Demo data reset.";
+
+    }
+  );
+
+
+  /* =========================
+     START APP
+  ========================= */
+
+  render();
+
+
+  /*
+    Register the service worker.
+
+    This enables the PWA's offline
+    caching once deployed over HTTPS.
+  */
+
+  if (
+    "serviceWorker" in navigator
+  ) {
+
+    window.addEventListener(
+      "load",
+      function () {
+
+        navigator.serviceWorker
+          .register(
+            "service-worker.js"
+          )
+          .catch(function () {
+
+            console.log(
+              "Service worker registration failed."
+            );
+
+          });
+
+      }
+    );
+
+  }
+
+})();
+</script>
+
+</body>
+</html>
